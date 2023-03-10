@@ -43,11 +43,19 @@ import Todos from "./components/Todos"
 //     }
 // ]
 
+const initialTodo = {
+  title: '',
+  description: '',
+  state: false,
+  priority: false
+}
+
 const initialStateTodos = JSON.parse(localStorage.getItem('todos'));
 
 const App = () => {
 
   const [ todos, setTodos] = useState(initialStateTodos);
+  const [todo, setTodo] = useState(initialTodo);
 
   useEffect( () => {
     localStorage.setItem('todos', JSON.stringify(todos));
@@ -108,7 +116,10 @@ const App = () => {
         <h1 className="my-5">Formularios</h1>
         {/*<NoControlado />*/}
         <Formulario 
-          addTodo={addTodo} 
+          addTodo={addTodo}
+          initialTodo={initialTodo}
+          todo={todo}
+          setTodo={setTodo}
         />
         <Todos 
           todos={orderTodos(todos)} 

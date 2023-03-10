@@ -1,18 +1,8 @@
 import { useState } from "react";
 import Swal from 'sweetalert2';
 
-const initialTodo = {
-    title: '',
-    description: '',
-    state: false,
-    priority: false
-}
+const Formulario = ({addTodo, initialTodo, todo, setTodo}) => {
 
-
-const Formulario = ({addTodo}) => {
-
-    const [todo, setTodo] = useState(initialTodo);
-    
     const [mensaje, setMensaje] = useState(false);
 
     const {title, description, state, priority} = todo;
