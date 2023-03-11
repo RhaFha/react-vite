@@ -50,7 +50,7 @@ const initialTodo = {
   priority: false
 }
 
-const initialStateTodos = JSON.parse(localStorage.getItem('todos'));
+const initialStateTodos = localStorage.getItem('todos') !== null ? JSON.parse(localStorage.getItem('todos')) : [];console.log('inicial', initialStateTodos);
 
 const App = () => {
 
@@ -103,11 +103,16 @@ const App = () => {
   }
 
   const orderTodos = (arrayTodos) => {
-    return arrayTodos.sort((a, b) => {
+
+    if(arrayTodos.length !== 0){
+      return arrayTodos.sort((a, b) => {
         if(a.priority === b.priority)return 0;
         if(a.priority === true ) return -1;
         if(a.priority === false ) return ;
-    })
+      })
+    }
+    return arrayTodos;
+    
   }
 
   return (
