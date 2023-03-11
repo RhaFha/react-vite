@@ -50,7 +50,7 @@ const initialTodo = {
   priority: false
 }
 
-const initialStateTodos = localStorage.getItem('todos') !== null ? JSON.parse(localStorage.getItem('todos')) : [];console.log('inicial', initialStateTodos);
+const initialStateTodos = localStorage.getItem('todos') !== null ? JSON.parse(localStorage.getItem('todos')) : [];
 
 const App = () => {
 
@@ -102,6 +102,22 @@ const App = () => {
 
   }
 
+  const updateFormTodo = updateTodo => {
+    setTodo(updateTodo);
+  }
+
+  const updateAllTodo = updateTodo => {
+    const updateTodos = todos.map( todo => {
+      if(todo.id === updateTodo.id){
+        todo = updateTodo;
+      }
+      return todo;
+    });
+
+    setTodos(updateTodos);
+
+  }
+
   const orderTodos = (arrayTodos) => {
 
     if(arrayTodos.length !== 0){
@@ -125,11 +141,13 @@ const App = () => {
           initialTodo={initialTodo}
           todo={todo}
           setTodo={setTodo}
+          updateAllTodo={updateAllTodo}
         />
         <Todos 
           todos={orderTodos(todos)} 
           deleteTodo={deleteTodo} 
           updateTodo={updateTodo}
+          updateFormTodo={updateFormTodo}
         />
       </div> 
     </>

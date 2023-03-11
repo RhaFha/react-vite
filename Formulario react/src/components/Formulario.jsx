@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Swal from 'sweetalert2';
 
-const Formulario = ({addTodo, initialTodo, todo, setTodo}) => {
+const Formulario = ({addTodo, initialTodo, todo, setTodo, updateAllTodo}) => {
 
     const [mensaje, setMensaje] = useState(false);
 
@@ -35,6 +35,34 @@ const Formulario = ({addTodo, initialTodo, todo, setTodo}) => {
 
     }
 
+    const handleUpdate = (e) => {
+        e.preventDefault();
+        
+        if( !title.trim() || !description.trim() ){
+            return Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Titulo y Descripción obligatorios',
+              })
+        }
+
+        updateAllTodo({
+                ...todo, 
+                state: state === 'completado'
+        })
+
+        setTodo(initialTodo);
+
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Se actualizo correctamente',
+            showConfirmButton: false,
+            timer: 1500
+            })
+
+    }
+
     const handleChange = (e) => {
         //setTodo( { ...todo, priority: e.target.checked } )
         const {name, value, type, checked} = e.target
@@ -57,7 +85,7 @@ const Formulario = ({addTodo, initialTodo, todo, setTodo}) => {
 
     return (
         
-        <form onSubmit={handleSubmit} >
+        <form onSubmit={todo.id ? handleUpdate : handleSubmit } >
              <div>{ mensaje && <PintarError /> }</div>
             <input 
                 type='text' 
@@ -102,7 +130,7 @@ const Formulario = ({addTodo, initialTodo, todo, setTodo}) => {
             <button 
                 type="submit"
                 className="btn btn-primary mx-2"
-            >Agregar</button>
+            >{todo.id ? 'Actualizar' : 'Agregar'}</button>
             <button 
                 type="button"
                 className="btn btn-danger"

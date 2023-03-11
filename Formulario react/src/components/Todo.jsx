@@ -1,4 +1,4 @@
-const Todo = ({todo, deleteTodo, updateTodo}) => {
+const Todo = ({todo, deleteTodo, updateTodo, updateFormTodo}) => {
 
     const {id, title, description, state, priority} = todo;
 
@@ -16,6 +16,10 @@ const Todo = ({todo, deleteTodo, updateTodo}) => {
                     <button 
                     className="btn btn-sm btn-warning mb-2"
                     onClick={() => updateTodo(id)}
+                    >Cambiar Estatus</button>
+                    <button 
+                    className="btn btn-sm btn-primary mb-2"
+                    onClick={() => updateFormTodo(todo)}
                     >Actualizar</button>
                 </div>
             </div>

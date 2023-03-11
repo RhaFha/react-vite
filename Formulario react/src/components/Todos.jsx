@@ -1,6 +1,6 @@
 import Todo from "./Todo";
 
-const Todos = ({todos, deleteTodo, updateTodo}) => {
+const Todos = ({todos, deleteTodo, updateTodo, updateFormTodo}) => {
     return(
         <div className="mt-4">
             <h1 className="text-center">Todos</h1>
@@ -15,6 +15,7 @@ const Todos = ({todos, deleteTodo, updateTodo}) => {
                                 todo={todo}
                                 deleteTodo={deleteTodo}
                                 updateTodo={updateTodo}
+                                updateFormTodo={updateFormTodo}
                             />
                         ))
                 }
