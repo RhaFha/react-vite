@@ -1,63 +1,94 @@
-import CrossIcon from "./componentes/icoms/CrossIcon"
+import { useState, useEffect } from "react";
+import Header from "./componentes/Header";
+import TodoComputer from "./componentes/TodoComputer";
+import TodoCreate from "./componentes/TodoCreate";
+import TodoFilter from "./componentes/TodoFilter";
+import TodoList from "./componentes/TodoList";
+
+const initialTodos =
+    localStorage.getItem("todos") !== null
+        ? JSON.parse(localStorage.getItem("todos"))
+        : [];
 
 const App = () => {
+    const [todos, setTodos] = useState(initialTodos);
 
-  return (
-    <div className="bg-[url('./assets/images/bg-mobile-light.jpg')] bg-no-repeat bg-contain bg-gray-300 min-h-screen" >
-      <header className="container mx-auto px-4 pt-8">
-        <div className="flex justify-between">
-          <h1 className="uppercase text-white text-3xl font-semibold tracking-[0.3em]">TODO</h1>
-          <button>luna</button>
+    const [filter, setFilter] = useState("all");
+
+    useEffect(() => {
+        localStorage.setItem("todos", JSON.stringify(todos));
+    }, [todos]);
+
+    const handleCreate = (todo) => {
+        const newTodo = {
+            id: Date(),
+            title: todo.title,
+            completed: todo.completed,
+        };
+
+        setTodos([...todos, newTodo]);
+
+        return true;
+    };
+
+    const handleRemove = (id) => {
+        setTodos(todos.filter((todo) => todo.id !== id));
+    };
+
+    const handleUpdate = (id) => {
+        setTodos(
+            todos.map((todo) =>
+                todo.id === id ? { ...todo, completed: !todo.completed } : todo
+            )
+        );
+    };
+
+    const computerItemsLeft = todos.filter((todo) => !todo.completed).length;
+    const clearItemsCompleted = () => {
+        setTodos(todos.filter((todo) => !todo.completed));
+    };
+
+    const filteredTodos = () => {
+        switch (filter) {
+            case "all":
+                return todos;
+            case "activate":
+                return todos.filter((todos) => !todos.completed);
+            case "completed":
+                return todos.filter((todos) => todos.completed);
+            default:
+                return todos;
+        }
+    };
+
+    const changeFilter = (filter) => setFilter(filter);
+
+    return (
+        <div className="min-h-screen bg-gray-300 bg-[url('./assets/images/bg-mobile-light.jpg')] bg-contain bg-no-repeat dark:bg-gray-900 dark:bg-[url('./assets/images/bg-mobile-dark.jpg')] md:bg-[url('./assets/images/bg-desktop-light.jpg')] dark:md:bg-[url('./assets/images/bg-desktop-dark.jpg')]">
+            <Header />
+
+            <main className="container mx-auto mt-8 px-4 md:max-w-xl">
+                <TodoCreate handleCreate={handleCreate} />
+
+                <TodoList
+                    todos={filteredTodos()}
+                    handleUpdate={handleUpdate}
+                    handleRemove={handleRemove}
+                />
+
+                <TodoComputer
+                    computerItemsLeft={computerItemsLeft}
+                    clearItemsCompleted={clearItemsCompleted}
+                />
+
+                <TodoFilter changeFilter={changeFilter} filter={filter} />
+            </main>
+
+            <footer className="mt-8 text-center dark:text-gray-400">
+                Drag and Drog react order
+            </footer>
         </div>
-        <form className="flex gap-4 items-center bg-white rounded-md overflow-hidden py-4 px-4 mt-8">
-          <spam className="rounded-full border-2 w-5 h-5 inline-block"></spam>
-          <input type='text' placeholder="Create a new todo..." className="w-full text-gray-400 outline-none"/>
-        </form>
-      </header>
-      <main className="container mx-auto mt-8 px-4 ">
-        <div className="bg-white rounded-md">
+    );
+};
 
-          <article className="flex gap-4 py-4 items-center border-b border-b-gray-400 px-4">
-            <button className="flex-none rounded-full border-2 w-5 h-5 inline-block"></button>
-            <p className="grow text-gray-600">Curso completado</p>
-            <button className="flex-none">
-              <CrossIcon />
-            </button>
-          </article>
-          
-          <article className="flex gap-4 py-4 items-center border-b border-b-gray-400 px-4">
-            <button className="flex-none rounded-full border-2 w-5 h-5 inline-block"></button>
-            <p className="grow text-gray-600">Curso completado</p>
-            <button className="flex-none">
-              <CrossIcon />
-            </button>
-          </article>
-          
-          <article className="flex gap-4 py-4 items-center border-b border-b-gray-400 px-4">
-            <button className="flex-none rounded-full border-2 w-5 h-5 inline-block"></button>
-            <p className="grow text-gray-600">Curso completado</p>
-            <button className="flex-none">
-              <CrossIcon />
-            </button>
-          </article>
-          
-        </div>
-
-        <section>
-          <span>5 item left</span>
-          <button>Clear complete</button>
-        </section>
-      </main>
-
-      <section className="container mx-auto px-4">
-        <button>All</button>
-        <button>Activate</button>
-        <button>Complete</button>
-      </section>
-
-      <section>Drag and Drog react order</section>
-    </div>
-  )
-}
-
-export default App
+export default App;
