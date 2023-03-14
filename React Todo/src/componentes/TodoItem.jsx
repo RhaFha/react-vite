@@ -1,7 +1,8 @@
 import CrossIcon from "./icoms/CrossIcon";
 import CheckIcon from "./icoms/CheckIcon";
+import React from "react";
 
-const TodoItem = ({ todo, handleUpdate, handleRemove }) => {
+const TodoItem = React.forwardRef(({ todo, handleUpdate, handleRemove, ...props }, ref) => {
     const { id, title, completed } = todo;
 
     const handleClickUpdate = () => {
@@ -13,7 +14,7 @@ const TodoItem = ({ todo, handleUpdate, handleRemove }) => {
     };
 
     return (
-        <article className="flex items-center gap-4 border-b border-b-gray-400 dark:bg-gray-800 ">
+        <article {...props} ref={ref} className="flex items-center gap-4 border-b border-b-gray-400 dark:bg-gray-800 ">
             {/* <button className="inline-block h-5 w-5 flex-none rounded-full border-2">
                 <CheckIcon className="" />
             </button> */}
@@ -39,6 +40,6 @@ const TodoItem = ({ todo, handleUpdate, handleRemove }) => {
             </button>
         </article>
     );
-};
+})
 
 export default TodoItem;
