@@ -9,10 +9,16 @@ const NavBar = () => {
           <Link className="btn btn-outline-primary" to="/">
             Home
           </Link>
-          <Link className="btn btn-outline-primary" to="contacto">
+          <Link className="btn btn-outline-primary" to="/contacto">
             Contacto
           </Link>
+          <Link className="btn btn-outline-primary" to="/blog">
+            Blog
+          </Link>
         </div>
+      </div>
+      <div className="container">
+        <Outlet />
       </div>
     </>
   );
