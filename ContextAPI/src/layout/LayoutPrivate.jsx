@@ -1,5 +1,7 @@
+import { Outlet } from "react-router-dom";
+
 const LayoutPrivate = () => {
-  return <h1>LayoutPrivate</h1>;
+  return <Outlet />;
 };
 
 export default LayoutPrivate;
