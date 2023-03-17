@@ -5,6 +5,11 @@ import { useRedirectActiveUser } from "../hooks/useRedirectActiveUser";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
+import { Avatar, Box, Button, TextField, Typography } from "@mui/material";
+import AddAPhoto from "@mui/icons-material/AddAPhoto";
+import { LoadingButton } from "@mui/lab";
+import { Link } from "react-router-dom";
+
 const Register = () => {
   const formik = useFormik({
     initialValues: {
@@ -35,28 +40,69 @@ const Register = () => {
   };
 
   return (
-    <>
-      <h1>Registrar nuevo usuario</h1>
-      <form onSubmit={formik.handleSubmit}>
-        <input
+    <Box sx={{ mt: 8, maxWidth: 400, mx: "auto", textAlign: "center" }}>
+      <Avatar sx={{ mx: "auto", bgcolor: "#111" }}>
+        <AddAPhoto />
+      </Avatar>
+      <Typography variant="h5" component="h1">
+        Registrarme
+      </Typography>
+      <Box onSubmit={formik.handleSubmit} sx={{ mt: 1 }} component="form">
+        <TextField
           type="text"
-          placeholder="ingrese Email"
+          placeholder="test@test.com"
           value={formik.values.email}
           onChange={formik.handleChange}
           name="email"
           id="email"
-        ></input>
-        <input
+          label="Ingrese email..."
+          fullWidth
+          sx={{ mb: 2 }}
+          error={formik.errors.email !== undefined}
+          helperText={
+            formik.touched.email && formik.errors.email
+              ? formik.errors.email
+              : null
+          }
+        />
+        <TextField
           type="password"
-          placeholder="ingrese la contraseña"
+          placeholder="Contraseña"
           value={formik.values.password}
           onChange={formik.handleChange}
           name="password"
           id="password"
-        ></input>
-        <button typeof="submit"> Registrarme </button>
-      </form>
-    </>
+          label="Ingrese la contraseña..."
+          fullWidth
+          sx={{ mb: 2 }}
+          error={formik.errors.password !== undefined}
+          helperText={
+            formik.touched.password && formik.errors.password
+              ? formik.errors.password
+              : null
+          }
+        />
+
+        <LoadingButton
+          variant="contained"
+          type="submit"
+          fullWidth
+          loading={formik.isSubmitting}
+        >
+          Registrarme
+        </LoadingButton>
+        <Button
+          variant="text"
+          type="submit"
+          fullWidth
+          component={Link}
+          to="/"
+          sx={{ mt: 2 }}
+        >
+          ¿Ya tienes cuenta? Ingresa
+        </Button>
+      </Box>
+    </Box>
   );
 };
 
