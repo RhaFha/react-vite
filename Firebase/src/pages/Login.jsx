@@ -2,47 +2,67 @@ import { useState } from "react";
 import { login } from "../config/firebase";
 import { useUserContext } from "../context/UserContext";
 import { useRedirectActiveUser } from "../hooks/useRedirectActiveUser";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 const Login = () => {
-  const [loginUser, setLoginUser] = useState({
-    email: "",
-    password: "",
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: Yup.object({
+      password: Yup.string()
+        .min(6, "Must be 6 characters or less")
+        .required("Required"),
+      email: Yup.string().email("Invalid email address").required("Required"),
+    }),
+    onSubmit: (values, { setSubmitting, setErrors }) => {
+      onSubmit(values, setErrors);
+    },
   });
 
   const { user } = useUserContext();
   useRedirectActiveUser(user, "/dashboard");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (values, setErrors) => {
     try {
-      const credentialUser = await login(loginUser);
+      const credentialUser = await login(values);
       console.log(credentialUser);
     } catch (error) {
-      console.log(error);
+      if (error.code === "auth/user-not-found") {
+        setErrors({ email: "Usuario no registrado" });
+      }
     }
   };
 
   return (
     <>
       <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={formik.handleSubmit}>
         <input
           type="text"
           placeholder="ingrese Email"
-          value={loginUser.email}
-          onChange={(e) =>
-            setLoginUser({ ...loginUser, email: e.target.value })
-          }
+          value={formik.values.email}
+          onChange={formik.handleChange}
+          name="email"
+          id="email"
         ></input>
+        {formik.touched.email && formik.errors.email ? (
+          <div>{formik.errors.email}</div>
+        ) : null}
         <input
           type="password"
           placeholder="ingrese la contraseña"
-          value={loginUser.password}
-          onChange={(e) =>
-            setLoginUser({ ...loginUser, password: e.target.value })
-          }
+          value={formik.values.password}
+          onChange={formik.handleChange}
+          name="password"
+          id="password"
         ></input>
-        <button typeof="submit"> Login </button>
+        {formik.touched.password && formik.errors.password ? (
+          <div>{formik.errors.password}</div>
+        ) : null}
+        <button type="submit"> Login </button>
       </form>
     </>
   );
